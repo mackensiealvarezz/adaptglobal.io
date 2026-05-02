@@ -12,11 +12,20 @@ export const metadata = {
     url: 'https://adaptglobal.io/',
     siteName: 'Adapt',
     type: 'website',
+    images: [
+      {
+        url: 'https://adaptglobal.io/wp-content/uploads/2024/08/press-release_4.1.24.jpg',
+        width: 896,
+        height: 438,
+        alt: 'Adapt — The Future of Media Localization',
+      },
+    ],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Adapt — The Future of Media Localization',
     description: 'Premium AI-powered dubbing and subtitling. 4× cheaper, 4× faster.',
+    images: ['https://adaptglobal.io/wp-content/uploads/2024/08/press-release_4.1.24.jpg'],
   },
   robots: { index: true, follow: true },
 };
