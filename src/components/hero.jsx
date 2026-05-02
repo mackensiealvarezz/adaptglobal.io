@@ -85,7 +85,8 @@ const Hero = ({ tweaks }) => {
       }}>
         <h1 className="display-1" style={{ maxWidth: '14ch' }}>
           The future of<br />
-          <span style={{ color: 'var(--accent-2)' }} className="italic-serif">media</span>{' '}
+          <span style={{ color: 'var(--accent-2)' }} className="italic-serif">media</span>
+          <br />
           <span style={{ position: 'relative', display: 'inline-block' }}>
             <span
               key={cur.word}
@@ -93,6 +94,7 @@ const Hero = ({ tweaks }) => {
               style={{
                 color: 'var(--accent)',
                 display: 'inline-block',
+                whiteSpace: 'nowrap',
                 opacity: 1,
                 animation: 'morphIn 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) both',
               }}

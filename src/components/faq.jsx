@@ -29,7 +29,7 @@ const FAQ = () => {
           display: 'grid', gridTemplateColumns: '0.9fr 1.1fr',
           gap: 'clamp(40px, 6vw, 96px)', alignItems: 'start',
         }} className="faq-grid">
-          <div style={{ position: 'sticky', top: 100 }}>
+          <div className="faq-sticky" style={{ position: 'sticky', top: 100 }}>
             <h2 className="display-2">
               Common<br />
               <span className="italic-serif" style={{ color: 'var(--accent-2)' }}>questions.</span>
@@ -106,7 +106,10 @@ const FAQ = () => {
       })}} />
 
       <style>{`
-        @media (max-width: 880px) { .faq-grid { grid-template-columns: 1fr !important; } }
+        @media (max-width: 880px) {
+          .faq-grid { grid-template-columns: 1fr !important; }
+          .faq-sticky { position: static !important; }
+        }
       `}</style>
     </section>
   );
