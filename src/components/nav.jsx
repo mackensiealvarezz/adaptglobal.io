@@ -1,9 +1,12 @@
 'use client';
 import React from 'react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 // Top navigation
 const Nav = ({ tweaks }) => {
   const [scrolled, setScrolled] = React.useState(false);
+  const pathname = usePathname();
 
   React.useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -24,11 +27,10 @@ const Nav = ({ tweaks }) => {
   };
 
   const links = [
-    { label: 'Platform', href: '#platform' },
-    { label: 'Studios & Broadcasters', href: '#studios' },
-    { label: 'Creators', href: '#studios' },
-    { label: 'Process', href: '#process' },
-    { label: 'About', href: '#about' },
+    { label: 'Platform', href: '/platform' },
+    { label: 'Studios & Broadcasters', href: '/studios-broadcasters' },
+    { label: 'Creators', href: '/creators' },
+    { label: 'About', href: '/about' },
   ];
 
   return (
@@ -37,7 +39,7 @@ const Nav = ({ tweaks }) => {
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
         height: 72, gap: 24,
       }}>
-        <a href="https://adaptglobal.io/" aria-label="Adapt — home" style={{
+        <Link href="/" aria-label="Adapt — home" style={{
           display: 'flex', alignItems: 'center',
           height: 28,
         }}>
@@ -46,19 +48,27 @@ const Nav = ({ tweaks }) => {
             alt="Adapt"
             style={{ height: 24, width: 'auto', display: 'block' }}
           />
-        </a>
+        </Link>
 
         <div style={{
           display: 'flex', alignItems: 'center', gap: 28,
           fontSize: 14, color: 'var(--fg-2)',
         }} className="nav-links-desktop">
-          {links.map(l => (
-            <a key={l.label} href={l.href} style={{ transition: 'color 0.15s' }}
-               onMouseEnter={e => e.currentTarget.style.color = 'var(--fg)'}
-               onMouseLeave={e => e.currentTarget.style.color = 'var(--fg-2)'}>
-              {l.label}
-            </a>
-          ))}
+          {links.map(l => {
+            const active = pathname === l.href || pathname.startsWith(l.href + '/');
+            return (
+              <Link key={l.label} href={l.href} style={{
+                transition: 'color 0.15s',
+                color: active ? 'var(--fg)' : 'var(--fg-2)',
+                borderBottom: active ? '1px solid var(--accent)' : '1px solid transparent',
+                paddingBottom: 2,
+              }}
+                onMouseEnter={e => e.currentTarget.style.color = 'var(--fg)'}
+                onMouseLeave={e => e.currentTarget.style.color = active ? 'var(--fg)' : 'var(--fg-2)'}>
+                {l.label}
+              </Link>
+            );
+          })}
         </div>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>

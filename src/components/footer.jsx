@@ -16,7 +16,7 @@ const Footer = () => {
           marginBottom: 56,
         }} className="foot-grid">
           <div>
-            <a href="https://adaptglobal.io/" aria-label="Adapt — home" style={{
+            <a href="/" aria-label="Adapt — home" style={{
               display: 'inline-flex', alignItems: 'center',
             }}>
               <img
@@ -59,20 +59,20 @@ const Footer = () => {
           </div>
 
           <FooterCol title="Platform" links={[
-            ['Nuance', '#platform'],
-            ['Process', '#process'],
-            ['Languages', '#languages'],
-            ['Brand guidelines', '#brand'],
+            ['Nuance', '/platform'],
+            ['Process', '/studios-broadcasters#process'],
+            ['Languages', '/#languages'],
+            ['Brand guidelines', 'https://adaptglobal.io/brand/'],
           ]} />
           <FooterCol title="For" links={[
-            ['Studios & Broadcasters', '#studios'],
-            ['Creators', '#studios'],
+            ['Studios & Broadcasters', '/studios-broadcasters'],
+            ['Creators', '/creators'],
             ['Freelancers', 'mailto:joinus@adaptglobal.io'],
           ]} />
           <FooterCol title="Company" links={[
-            ['About', '#about'],
-            ['Press', '#press'],
-            ['Privacy', '#privacy'],
+            ['About', '/about'],
+            ['Press', 'https://adaptglobal.io/press/'],
+            ['Privacy', 'https://adaptglobal.io/privacy-policy/'],
             ['Contact', 'mailto:info@adaptglobal.io'],
           ]} />
         </div>
