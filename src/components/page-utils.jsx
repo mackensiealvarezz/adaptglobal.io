@@ -970,10 +970,7 @@ const TeamCard = ({ name, role, lang, bio, img }) => {
               width: '100%', height: '100%',
               objectFit: 'cover', objectPosition: 'top',
               filter: 'grayscale(1) contrast(1.1)', display: 'block',
-              transition: 'filter 0.35s',
             }}
-            onMouseEnter={e => { e.currentTarget.style.filter = 'grayscale(0.2) contrast(1.05)'; }}
-            onMouseLeave={e => { e.currentTarget.style.filter = 'grayscale(1) contrast(1.1)'; }}
           />
         </div>
         <span style={{
@@ -996,4 +993,53 @@ const TeamCard = ({ name, role, lang, bio, img }) => {
   );
 };
 
-export { VideoCard, PageHero, ScreenRow, PlatformAnimation, AdaptProcessFlow, FeaturedVideoCard, TeamCard };
+// Portrait card for internal leadership — color photo, click for bio modal
+const LeaderCard = ({ name, title, bio, img }) => {
+  const [open, setOpen] = React.useState(false);
+  const hasBio = Boolean(bio);
+  return (
+    <>
+      <figure
+        onClick={() => hasBio && setOpen(true)}
+        style={{
+          margin: 0, cursor: hasBio ? 'pointer' : 'default',
+          borderRadius: 16, overflow: 'hidden',
+          background: 'var(--bg-3)', border: '1px solid var(--line)',
+          position: 'relative', aspectRatio: '3 / 4',
+          transition: 'border-color 0.25s, transform 0.25s',
+        }}
+        onMouseEnter={e => { if (hasBio) { e.currentTarget.style.borderColor = 'var(--line-2)'; e.currentTarget.style.transform = 'translateY(-3px)'; } }}
+        onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--line)'; e.currentTarget.style.transform = 'none'; }}
+      >
+        <img src={img} alt={name} loading="lazy" style={{
+          width: '100%', height: '100%',
+          objectFit: 'cover', objectPosition: 'top',
+          filter: 'grayscale(1) contrast(1.1)', display: 'block',
+        }} />
+        <div style={{
+          position: 'absolute', inset: 0,
+          background: 'linear-gradient(to top, rgba(10,10,11,0.92) 0%, rgba(10,10,11,0) 55%)',
+        }} />
+        {hasBio && (
+          <div style={{
+            position: 'absolute', top: 12, right: 12,
+            width: 26, height: 26, borderRadius: '50%',
+            background: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(6px)',
+            border: '1px solid rgba(255,255,255,0.18)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            fontSize: 11, color: 'var(--fg-2)',
+          }}>↗</div>
+        )}
+        <figcaption style={{ position: 'absolute', left: 16, right: 16, bottom: 16 }}>
+          <div style={{ fontFamily: 'var(--serif)', fontSize: 'clamp(15px,1.3vw,19px)', lineHeight: 1.2 }}>{name}</div>
+          <div style={{ fontFamily: 'var(--mono)', fontSize: 9, letterSpacing: '0.13em', textTransform: 'uppercase', color: 'var(--fg-3)', marginTop: 5, lineHeight: 1.4 }}>{title}</div>
+        </figcaption>
+      </figure>
+      {open && (
+        <TeamMemberModal name={name} role={title} lang="" bio={bio} img={img} color="var(--accent)" onClose={() => setOpen(false)} />
+      )}
+    </>
+  );
+};
+
+export { VideoCard, PageHero, ScreenRow, PlatformAnimation, AdaptProcessFlow, FeaturedVideoCard, TeamCard, LeaderCard };
