@@ -1,67 +1,173 @@
 'use client';
 import React from 'react';
+import { createPortal } from 'react-dom';
 
-// Reusable video card with hover-to-preview
+// Full-screen video modal — rendered in document.body via portal
+const VideoModal = ({ src, title, lang, type, onClose }) => {
+  const videoRef = React.useRef(null);
+  const [mounted, setMounted] = React.useState(false);
+
+  React.useEffect(() => { setMounted(true); }, []);
+
+  React.useEffect(() => {
+    if (!mounted) return;
+    videoRef.current?.play().catch(() => {});
+    const onKey = (e) => { if (e.key === 'Escape') onClose(); };
+    document.addEventListener('keydown', onKey);
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.removeEventListener('keydown', onKey);
+      document.body.style.overflow = '';
+    };
+  }, [mounted, onClose]);
+
+  if (!mounted) return null;
+
+  return createPortal(
+    <div
+      onClick={onClose}
+      style={{
+        position: 'fixed', inset: 0, zIndex: 1000,
+        background: 'rgba(0,0,0,0.88)',
+        backdropFilter: 'blur(14px)', WebkitBackdropFilter: 'blur(14px)',
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        padding: 'clamp(16px,4vw,40px)',
+        animation: 'vModalIn 0.2s ease',
+      }}
+    >
+      <div
+        onClick={e => e.stopPropagation()}
+        style={{
+          position: 'relative', width: '100%', maxWidth: 1100,
+          background: 'var(--bg-3)', borderRadius: 20,
+          border: '1px solid var(--line-2)',
+          overflow: 'hidden',
+          boxShadow: '0 40px 120px rgba(0,0,0,0.85)',
+          animation: 'vModalUp 0.25s ease',
+        }}
+      >
+        <button
+          onClick={onClose}
+          aria-label="Close video"
+          style={{
+            position: 'absolute', top: 14, right: 14, zIndex: 10,
+            width: 38, height: 38, borderRadius: '50%',
+            background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(8px)',
+            border: '1px solid rgba(255,255,255,0.15)',
+            color: '#fff', fontSize: 22, lineHeight: 1,
+            cursor: 'pointer',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            transition: 'background 0.15s',
+          }}
+          onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,0.18)'}
+          onMouseLeave={e => e.currentTarget.style.background = 'rgba(0,0,0,0.6)'}
+        >×</button>
+
+        <video
+          ref={videoRef}
+          controls loop playsInline
+          style={{ width: '100%', display: 'block', maxHeight: '80vh', background: '#000' }}
+        >
+          <source src={src} type="video/mp4" />
+        </video>
+
+        <div style={{
+          padding: '16px 24px',
+          display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 16,
+        }}>
+          <div>
+            <div style={{ fontFamily: 'var(--mono)', fontSize: 10, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'var(--fg-3)' }}>{lang}</div>
+            <div style={{ fontFamily: 'var(--serif)', fontSize: 'clamp(16px,2vw,22px)', color: 'var(--fg)', marginTop: 4 }}>{title}</div>
+          </div>
+          <div style={{
+            fontFamily: 'var(--mono)', fontSize: 10, letterSpacing: '0.18em',
+            textTransform: 'uppercase', color: 'var(--fg-3)',
+            padding: '6px 12px', border: '1px solid var(--line)', borderRadius: 999, flexShrink: 0,
+          }}>{type}</div>
+        </div>
+      </div>
+      <style>{`
+        @keyframes vModalIn { from { opacity:0 } to { opacity:1 } }
+        @keyframes vModalUp { from { transform:translateY(24px);opacity:0 } to { transform:none;opacity:1 } }
+      `}</style>
+    </div>,
+    document.body
+  );
+};
+
+// Reusable video card — hover to preview with sound, click to open modal
 const VideoCard = ({ src, title, lang, type }) => {
   const videoRef = React.useRef(null);
   const [hovered, setHovered] = React.useState(false);
+  const [modalOpen, setModalOpen] = React.useState(false);
 
   const handleEnter = () => {
     setHovered(true);
-    videoRef.current?.play().catch(() => {});
+    if (videoRef.current) {
+      videoRef.current.muted = false;
+      videoRef.current.play().catch(() => {
+        if (videoRef.current) { videoRef.current.muted = true; videoRef.current.play().catch(() => {}); }
+      });
+    }
   };
   const handleLeave = () => {
     setHovered(false);
-    if (videoRef.current) { videoRef.current.pause(); videoRef.current.currentTime = 0; }
+    if (videoRef.current) {
+      videoRef.current.pause();
+      videoRef.current.currentTime = 0;
+      videoRef.current.muted = true;
+    }
   };
 
   return (
-    <div
-      onMouseEnter={handleEnter}
-      onMouseLeave={handleLeave}
-      style={{
-        position: 'relative', borderRadius: 16, overflow: 'hidden',
-        background: 'var(--bg-3)', border: '1px solid var(--line)',
-        aspectRatio: '16 / 9', cursor: 'pointer',
-        transition: 'border-color 0.3s',
-        borderColor: hovered ? 'var(--line-2)' : 'var(--line)',
-      }}
-    >
-      <video
-        ref={videoRef}
-        muted loop playsInline preload="metadata"
-        style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+    <>
+      <div
+        onMouseEnter={handleEnter}
+        onMouseLeave={handleLeave}
+        onClick={() => setModalOpen(true)}
+        style={{
+          position: 'relative', borderRadius: 16, overflow: 'hidden',
+          background: 'var(--bg-3)', border: '1px solid var(--line)',
+          aspectRatio: '16 / 9', cursor: 'pointer',
+          transition: 'border-color 0.3s',
+          borderColor: hovered ? 'var(--line-2)' : 'var(--line)',
+        }}
       >
-        <source src={src} type="video/mp4" />
-      </video>
-      <div style={{
-        position: 'absolute', inset: 0,
-        background: 'linear-gradient(to top, rgba(10,10,11,0.9) 0%, rgba(10,10,11,0) 55%)',
-        transition: 'opacity 0.3s',
-        opacity: hovered ? 0.7 : 1,
-      }} />
-      <div style={{ position: 'absolute', top: 16, right: 16 }}>
+        <video
+          ref={videoRef}
+          muted loop playsInline preload="metadata"
+          style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+        >
+          <source src={src} type="video/mp4" />
+        </video>
         <div style={{
-          fontFamily: 'var(--mono)', fontSize: 10, letterSpacing: '0.18em',
-          textTransform: 'uppercase', color: 'var(--fg-3)',
-          padding: '6px 10px', background: 'rgba(10,10,11,0.6)',
-          border: '1px solid var(--line)', borderRadius: 999,
-        }}>{type}</div>
-      </div>
-      <div style={{ position: 'absolute', left: 20, bottom: 20 }}>
-        <div style={{ fontFamily: 'var(--mono)', fontSize: 10, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'var(--fg-3)' }}>{lang}</div>
-        <div style={{ fontFamily: 'var(--serif)', fontSize: 20, color: 'var(--fg)', marginTop: 4 }}>{title}</div>
-      </div>
-      {!hovered && (
+          position: 'absolute', inset: 0,
+          background: 'linear-gradient(to top, rgba(10,10,11,0.9) 0%, rgba(10,10,11,0) 55%)',
+          transition: 'opacity 0.3s', opacity: hovered ? 0.6 : 1,
+        }} />
+        <div style={{ position: 'absolute', top: 16, right: 16 }}>
+          <div style={{
+            fontFamily: 'var(--mono)', fontSize: 10, letterSpacing: '0.18em',
+            textTransform: 'uppercase', color: 'var(--fg-3)',
+            padding: '6px 10px', background: 'rgba(10,10,11,0.6)',
+            border: '1px solid var(--line)', borderRadius: 999,
+          }}>{type}</div>
+        </div>
+        <div style={{ position: 'absolute', left: 20, bottom: 20 }}>
+          <div style={{ fontFamily: 'var(--mono)', fontSize: 10, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'var(--fg-3)' }}>{lang}</div>
+          <div style={{ fontFamily: 'var(--serif)', fontSize: 20, color: 'var(--fg)', marginTop: 4 }}>{title}</div>
+        </div>
         <div style={{
           position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)',
           width: 48, height: 48, borderRadius: '50%',
           background: 'rgba(255,255,255,0.12)', backdropFilter: 'blur(8px)',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           fontSize: 16, color: 'var(--fg)',
+          opacity: hovered ? 0 : 1, transition: 'opacity 0.2s',
         }}>▶</div>
-      )}
-    </div>
+      </div>
+      {modalOpen && <VideoModal src={src} title={title} lang={lang} type={type} onClose={() => setModalOpen(false)} />}
+    </>
   );
 };
 
@@ -662,77 +768,90 @@ const AdaptProcessAnimation = () => {
   );
 };
 
-// Cinematic featured video card (21:9) for hero demo positions
+// Cinematic featured video card (21:9) — hover for sound, click for modal
 const FeaturedVideoCard = ({ src, title, lang, type, badge }) => {
   const videoRef = React.useRef(null);
   const [hovered, setHovered] = React.useState(false);
+  const [modalOpen, setModalOpen] = React.useState(false);
 
   const handleEnter = () => {
     setHovered(true);
-    videoRef.current?.play().catch(() => {});
+    if (videoRef.current) {
+      videoRef.current.muted = false;
+      videoRef.current.play().catch(() => {
+        if (videoRef.current) { videoRef.current.muted = true; videoRef.current.play().catch(() => {}); }
+      });
+    }
   };
   const handleLeave = () => {
     setHovered(false);
-    if (videoRef.current) { videoRef.current.pause(); videoRef.current.currentTime = 0; }
+    if (videoRef.current) {
+      videoRef.current.pause();
+      videoRef.current.currentTime = 0;
+      videoRef.current.muted = true;
+    }
   };
 
   return (
-    <div
-      onMouseEnter={handleEnter}
-      onMouseLeave={handleLeave}
-      style={{
-        position: 'relative', borderRadius: 20, overflow: 'hidden',
-        background: 'var(--bg-3)', border: '1px solid var(--line)',
-        aspectRatio: '21 / 9', cursor: 'pointer',
-        transition: 'border-color 0.3s',
-        borderColor: hovered ? 'var(--line-2)' : 'var(--line)',
-      }}
-    >
-      <video
-        ref={videoRef}
-        muted loop playsInline preload="metadata"
-        style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+    <>
+      <div
+        onMouseEnter={handleEnter}
+        onMouseLeave={handleLeave}
+        onClick={() => setModalOpen(true)}
+        style={{
+          position: 'relative', borderRadius: 20, overflow: 'hidden',
+          background: 'var(--bg-3)', border: '1px solid var(--line)',
+          aspectRatio: '21 / 9', cursor: 'pointer',
+          transition: 'border-color 0.3s',
+          borderColor: hovered ? 'var(--line-2)' : 'var(--line)',
+        }}
       >
-        <source src={src} type="video/mp4" />
-      </video>
-      <div style={{
-        position: 'absolute', inset: 0,
-        background: 'linear-gradient(to top, rgba(10,10,11,0.9) 0%, rgba(10,10,11,0.05) 55%)',
-        transition: 'opacity 0.3s',
-        opacity: hovered ? 0.4 : 1,
-      }} />
-      <div style={{ position: 'absolute', top: 20, left: 20, right: 20, display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-        {badge ? (
+        <video
+          ref={videoRef}
+          muted loop playsInline preload="metadata"
+          style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+        >
+          <source src={src} type="video/mp4" />
+        </video>
+        <div style={{
+          position: 'absolute', inset: 0,
+          background: 'linear-gradient(to top, rgba(10,10,11,0.9) 0%, rgba(10,10,11,0.05) 55%)',
+          transition: 'opacity 0.3s',
+          opacity: hovered ? 0.4 : 1,
+        }} />
+        <div style={{ position: 'absolute', top: 20, left: 20, right: 20, display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+          {badge ? (
+            <div style={{
+              fontFamily: 'var(--mono)', fontSize: 10, letterSpacing: '0.18em',
+              textTransform: 'uppercase', padding: '6px 12px',
+              background: 'color-mix(in oklab, var(--accent) 15%, rgba(10,10,11,0.8))',
+              border: '1px solid color-mix(in oklab, var(--accent) 45%, var(--line))',
+              borderRadius: 999, color: 'var(--accent)',
+            }}>{badge}</div>
+          ) : <span />}
           <div style={{
             fontFamily: 'var(--mono)', fontSize: 10, letterSpacing: '0.18em',
-            textTransform: 'uppercase', padding: '6px 12px',
-            background: 'color-mix(in oklab, var(--accent) 15%, rgba(10,10,11,0.8))',
-            border: '1px solid color-mix(in oklab, var(--accent) 45%, var(--line))',
-            borderRadius: 999, color: 'var(--accent)',
-          }}>{badge}</div>
-        ) : <span />}
-        <div style={{
-          fontFamily: 'var(--mono)', fontSize: 10, letterSpacing: '0.18em',
-          textTransform: 'uppercase', color: 'var(--fg-3)',
-          padding: '6px 10px', background: 'rgba(10,10,11,0.6)',
-          border: '1px solid var(--line)', borderRadius: 999,
-        }}>{type}</div>
-      </div>
-      <div style={{ position: 'absolute', left: 28, right: 28, bottom: 28, display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
-        <div>
-          <div style={{ fontFamily: 'var(--mono)', fontSize: 11, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'var(--fg-3)' }}>{lang}</div>
-          <div style={{ fontFamily: 'var(--serif)', fontSize: 'clamp(22px,3vw,38px)', color: 'var(--fg)', marginTop: 6, lineHeight: 1.1 }}>{title}</div>
+            textTransform: 'uppercase', color: 'var(--fg-3)',
+            padding: '6px 10px', background: 'rgba(10,10,11,0.6)',
+            border: '1px solid var(--line)', borderRadius: 999,
+          }}>{type}</div>
         </div>
-        {!hovered && (
+        <div style={{ position: 'absolute', left: 28, right: 28, bottom: 28, display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
+          <div>
+            <div style={{ fontFamily: 'var(--mono)', fontSize: 11, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'var(--fg-3)' }}>{lang}</div>
+            <div style={{ fontFamily: 'var(--serif)', fontSize: 'clamp(22px,3vw,38px)', color: 'var(--fg)', marginTop: 6, lineHeight: 1.1 }}>{title}</div>
+          </div>
           <div style={{
             width: 60, height: 60, borderRadius: '50%', flexShrink: 0,
             background: 'rgba(255,255,255,0.12)', backdropFilter: 'blur(8px)',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             fontSize: 20, color: 'var(--fg)',
+            opacity: hovered ? 0 : 1, transition: 'opacity 0.2s',
           }}>▶</div>
-        )}
+        </div>
       </div>
-    </div>
+      {modalOpen && <VideoModal src={src} title={title} lang={lang} type={type} onClose={() => setModalOpen(false)} />}
+    </>
   );
 };
 
