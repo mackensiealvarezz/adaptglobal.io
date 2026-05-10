@@ -855,4 +855,145 @@ const FeaturedVideoCard = ({ src, title, lang, type, badge }) => {
   );
 };
 
-export { VideoCard, PageHero, ScreenRow, PlatformAnimation, AdaptProcessFlow, FeaturedVideoCard };
+// Lang → accent color (used by TeamCard)
+const LANG_COLOR = {
+  ES: 'var(--accent)',   FR: 'var(--accent-2)', PT: 'var(--accent)',
+  DE: 'var(--accent-2)', KO: 'var(--accent)',   ZH: 'var(--accent-2)',
+  AR: 'var(--accent)',   HI: 'var(--accent-2)', ID: 'var(--accent)',
+  TR: 'var(--accent-2)', EN: 'var(--accent-2)',
+};
+
+// Bio modal — portal-rendered
+const TeamMemberModal = ({ name, role, lang, bio, img, color, onClose }) => {
+  const [mounted, setMounted] = React.useState(false);
+  React.useEffect(() => { setMounted(true); }, []);
+  React.useEffect(() => {
+    if (!mounted) return;
+    const onKey = (e) => { if (e.key === 'Escape') onClose(); };
+    document.addEventListener('keydown', onKey);
+    document.body.style.overflow = 'hidden';
+    return () => { document.removeEventListener('keydown', onKey); document.body.style.overflow = ''; };
+  }, [mounted, onClose]);
+  if (!mounted) return null;
+
+  return createPortal(
+    <div onClick={onClose} style={{
+      position: 'fixed', inset: 0, zIndex: 1000,
+      background: 'rgba(0,0,0,0.88)',
+      backdropFilter: 'blur(14px)', WebkitBackdropFilter: 'blur(14px)',
+      display: 'flex', alignItems: 'center', justifyContent: 'center',
+      padding: 'clamp(16px,4vw,40px)',
+      animation: 'vModalIn 0.2s ease',
+    }}>
+      <div onClick={e => e.stopPropagation()} style={{
+        position: 'relative', width: '100%', maxWidth: 680,
+        background: 'var(--bg-3)', borderRadius: 20,
+        border: '1px solid var(--line-2)',
+        boxShadow: '0 40px 120px rgba(0,0,0,0.85)',
+        animation: 'vModalUp 0.25s ease',
+        display: 'grid', gridTemplateColumns: '200px 1fr',
+        overflow: 'hidden',
+      }} className="team-modal-grid">
+        {/* Photo column */}
+        <div style={{
+          background: 'var(--bg)', borderRight: '1px solid var(--line)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          padding: '32px 24px',
+        }}>
+          <img src={img} alt={name} style={{
+            width: '100%', aspectRatio: '1 / 1', borderRadius: '50%',
+            objectFit: 'cover', objectPosition: 'top',
+            filter: 'grayscale(1) contrast(1.1)',
+            border: `2px solid color-mix(in oklab, ${color} 45%, var(--line))`,
+            display: 'block',
+          }} />
+        </div>
+        {/* Bio column */}
+        <div style={{ padding: '32px 28px', overflowY: 'auto', maxHeight: '70vh' }}>
+          <span style={{
+            fontFamily: 'var(--mono)', fontSize: 9, letterSpacing: '0.18em',
+            textTransform: 'uppercase', color,
+            padding: '3px 10px', borderRadius: 999,
+            border: `1px solid color-mix(in oklab, ${color} 40%, var(--line))`,
+            background: `color-mix(in oklab, ${color} 8%, transparent)`,
+            display: 'inline-block', marginBottom: 14,
+          }}>{lang}</span>
+          <h2 style={{ fontFamily: 'var(--serif)', fontSize: 'clamp(22px,2.5vw,30px)', lineHeight: 1.1, marginBottom: 6 }}>{name}</h2>
+          <div style={{ fontFamily: 'var(--mono)', fontSize: 10, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--fg-3)', marginBottom: 24 }}>{role}</div>
+          <p style={{ fontSize: 15, color: 'var(--fg-2)', lineHeight: 1.75, margin: 0 }}>{bio}</p>
+        </div>
+        {/* Close */}
+        <button onClick={onClose} aria-label="Close" style={{
+          position: 'absolute', top: 14, right: 14,
+          width: 36, height: 36, borderRadius: '50%',
+          background: 'rgba(255,255,255,0.08)', border: '1px solid var(--line)',
+          color: 'var(--fg)', fontSize: 20, cursor: 'pointer',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          transition: 'background 0.15s',
+        }}
+          onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,0.16)'}
+          onMouseLeave={e => e.currentTarget.style.background = 'rgba(255,255,255,0.08)'}
+        >×</button>
+      </div>
+      <style>{`@media(max-width:560px){.team-modal-grid{grid-template-columns:1fr!important;}}`}</style>
+    </div>,
+    document.body
+  );
+};
+
+// Circular B&W team card — click opens bio modal
+const TeamCard = ({ name, role, lang, bio, img }) => {
+  const [open, setOpen] = React.useState(false);
+  const color = LANG_COLOR[lang] || 'var(--accent)';
+  return (
+    <>
+      <figure
+        onClick={() => setOpen(true)}
+        style={{
+          margin: 0, cursor: 'pointer',
+          display: 'flex', flexDirection: 'column', alignItems: 'center',
+          gap: 10, padding: '12px 8px',
+          borderRadius: 14, border: '1px solid transparent',
+          transition: 'border-color 0.2s, background 0.2s',
+        }}
+        onMouseEnter={e => { e.currentTarget.style.background = 'var(--bg-2)'; e.currentTarget.style.borderColor = 'var(--line)'; }}
+        onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.borderColor = 'transparent'; }}
+      >
+        <div style={{
+          width: '100%', aspectRatio: '1 / 1', borderRadius: '50%', overflow: 'hidden',
+          border: `2px solid color-mix(in oklab, ${color} 35%, var(--line))`,
+          flexShrink: 0,
+        }}>
+          <img
+            src={img} alt={name} loading="lazy"
+            style={{
+              width: '100%', height: '100%',
+              objectFit: 'cover', objectPosition: 'top',
+              filter: 'grayscale(1) contrast(1.1)', display: 'block',
+              transition: 'filter 0.35s',
+            }}
+            onMouseEnter={e => { e.currentTarget.style.filter = 'grayscale(0.2) contrast(1.05)'; }}
+            onMouseLeave={e => { e.currentTarget.style.filter = 'grayscale(1) contrast(1.1)'; }}
+          />
+        </div>
+        <span style={{
+          fontFamily: 'var(--mono)', fontSize: 9, letterSpacing: '0.16em',
+          textTransform: 'uppercase', color,
+          padding: '2px 8px', borderRadius: 999,
+          border: `1px solid color-mix(in oklab, ${color} 35%, var(--line))`,
+          background: `color-mix(in oklab, ${color} 7%, transparent)`,
+        }}>{lang}</span>
+        <figcaption style={{ textAlign: 'center' }}>
+          <div style={{ fontFamily: 'var(--serif)', fontSize: 'clamp(13px,1.1vw,16px)', lineHeight: 1.2 }}>{name}</div>
+          <div style={{
+            fontFamily: 'var(--mono)', fontSize: 9, letterSpacing: '0.1em',
+            textTransform: 'uppercase', color: 'var(--fg-3)', marginTop: 4, lineHeight: 1.4,
+          }}>{role}</div>
+        </figcaption>
+      </figure>
+      {open && <TeamMemberModal name={name} role={role} lang={lang} bio={bio} img={img} color={color} onClose={() => setOpen(false)} />}
+    </>
+  );
+};
+
+export { VideoCard, PageHero, ScreenRow, PlatformAnimation, AdaptProcessFlow, FeaturedVideoCard, TeamCard };
