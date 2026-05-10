@@ -27,6 +27,7 @@ const Nav = ({ tweaks }) => {
     { label: 'Studios & Broadcasters', href: '/studios-broadcasters' },
     { label: 'Creators', href: '/creators' },
     { label: 'About', href: '/about' },
+    { label: 'Press', href: '/press' },
   ];
 
   const navBg = menuOpen

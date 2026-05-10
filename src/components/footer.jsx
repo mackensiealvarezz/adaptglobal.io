@@ -1,5 +1,6 @@
 'use client';
 import React from 'react';
+import Link from 'next/link';
 
 // Footer
 const Footer = () => {
@@ -71,7 +72,7 @@ const Footer = () => {
           ]} />
           <FooterCol title="Company" links={[
             ['About', '/about'],
-            ['Press', 'https://adaptglobal.io/press/'],
+            ['Press', '/press'],
             ['Privacy', 'https://adaptglobal.io/privacy-policy/'],
             ['Contact', 'mailto:info@adaptglobal.io'],
           ]} />
@@ -110,15 +111,23 @@ const FooterCol = ({ title, links }) => (
   <div>
     <div className="eyebrow" style={{ marginBottom: 16 }}>{title}</div>
     <ul style={{ margin: 0, padding: 0, listStyle: 'none', display: 'grid', gap: 10 }}>
-      {links.map(([label, href]) => (
-        <li key={label}>
+      {links.map(([label, href]) => {
+        const isInternal = href.startsWith('/');
+        const el = isInternal ? (
+          <Link href={href} style={{ fontSize: 14, color: 'var(--fg-2)' }}
+            onMouseEnter={e => e.currentTarget.style.color = 'var(--fg)'}
+            onMouseLeave={e => e.currentTarget.style.color = 'var(--fg-2)'}>
+            {label}
+          </Link>
+        ) : (
           <a href={href} style={{ fontSize: 14, color: 'var(--fg-2)' }}
-             onMouseEnter={e => e.currentTarget.style.color = 'var(--fg)'}
-             onMouseLeave={e => e.currentTarget.style.color = 'var(--fg-2)'}>
+            onMouseEnter={e => e.currentTarget.style.color = 'var(--fg)'}
+            onMouseLeave={e => e.currentTarget.style.color = 'var(--fg-2)'}>
             {label}
           </a>
-        </li>
-      ))}
+        );
+        return <li key={label}>{el}</li>;
+      })}
     </ul>
   </div>
 );
