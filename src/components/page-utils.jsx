@@ -28,67 +28,75 @@ const VideoModal = ({ src, title, lang, type, onClose }) => {
       onClick={onClose}
       style={{
         position: 'fixed', inset: 0, zIndex: 1000,
-        background: 'rgba(0,0,0,0.88)',
+        background: 'rgba(0,0,0,0.92)',
         backdropFilter: 'blur(14px)', WebkitBackdropFilter: 'blur(14px)',
         display: 'flex', alignItems: 'center', justifyContent: 'center',
-        padding: 'clamp(16px,4vw,40px)',
+        padding: '16px',
         animation: 'vModalIn 0.2s ease',
+        overflowY: 'auto',
       }}
     >
       <div
         onClick={e => e.stopPropagation()}
         style={{
           position: 'relative', width: '100%', maxWidth: 1100,
-          background: 'var(--bg-3)', borderRadius: 20,
+          background: 'var(--bg-3)', borderRadius: 16,
           border: '1px solid var(--line-2)',
           overflow: 'hidden',
           boxShadow: '0 40px 120px rgba(0,0,0,0.85)',
           animation: 'vModalUp 0.25s ease',
+          flexShrink: 0,
         }}
       >
+        {/* Close — always in top-right, large touch target */}
         <button
           onClick={onClose}
           aria-label="Close video"
+          className="modal-close-btn"
           style={{
-            position: 'absolute', top: 14, right: 14, zIndex: 10,
-            width: 38, height: 38, borderRadius: '50%',
-            background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(8px)',
-            border: '1px solid rgba(255,255,255,0.15)',
+            position: 'absolute', top: 10, right: 10, zIndex: 10,
+            width: 44, height: 44, borderRadius: '50%',
+            background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(8px)',
+            border: '1px solid rgba(255,255,255,0.2)',
             color: '#fff', fontSize: 22, lineHeight: 1,
             cursor: 'pointer',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             transition: 'background 0.15s',
           }}
-          onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,0.18)'}
-          onMouseLeave={e => e.currentTarget.style.background = 'rgba(0,0,0,0.6)'}
+          onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,0.2)'}
+          onMouseLeave={e => e.currentTarget.style.background = 'rgba(0,0,0,0.7)'}
         >×</button>
 
         <video
           ref={videoRef}
           controls loop playsInline
-          style={{ width: '100%', display: 'block', maxHeight: '80vh', background: '#000' }}
+          style={{ width: '100%', display: 'block', maxHeight: '75vh', background: '#000' }}
         >
           <source src={src} type="video/mp4" />
         </video>
 
-        <div style={{
-          padding: '16px 24px',
-          display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 16,
+        <div className="v-modal-footer" style={{
+          padding: '14px 20px',
+          display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+          gap: 12, flexWrap: 'wrap',
         }}>
-          <div>
+          <div style={{ minWidth: 0 }}>
             <div style={{ fontFamily: 'var(--mono)', fontSize: 10, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'var(--fg-3)' }}>{lang}</div>
-            <div style={{ fontFamily: 'var(--serif)', fontSize: 'clamp(16px,2vw,22px)', color: 'var(--fg)', marginTop: 4 }}>{title}</div>
+            <div style={{ fontFamily: 'var(--serif)', fontSize: 'clamp(15px,2vw,20px)', color: 'var(--fg)', marginTop: 3, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{title}</div>
           </div>
           <div style={{
             fontFamily: 'var(--mono)', fontSize: 10, letterSpacing: '0.18em',
             textTransform: 'uppercase', color: 'var(--fg-3)',
-            padding: '6px 12px', border: '1px solid var(--line)', borderRadius: 999, flexShrink: 0,
+            padding: '5px 12px', border: '1px solid var(--line)', borderRadius: 999, flexShrink: 0,
           }}>{type}</div>
         </div>
       </div>
       <style>{`
         @keyframes vModalIn { from { opacity:0 } to { opacity:1 } }
         @keyframes vModalUp { from { transform:translateY(24px);opacity:0 } to { transform:none;opacity:1 } }
+        @media(max-width:480px){
+          .v-modal-footer { padding: 12px 16px !important; }
+        }
       `}</style>
     </div>,
     document.body
@@ -879,11 +887,12 @@ const TeamMemberModal = ({ name, role, lang, bio, img, color, onClose }) => {
   return createPortal(
     <div onClick={onClose} style={{
       position: 'fixed', inset: 0, zIndex: 1000,
-      background: 'rgba(0,0,0,0.88)',
+      background: 'rgba(0,0,0,0.92)',
       backdropFilter: 'blur(14px)', WebkitBackdropFilter: 'blur(14px)',
       display: 'flex', alignItems: 'center', justifyContent: 'center',
-      padding: 'clamp(16px,4vw,40px)',
+      padding: '16px',
       animation: 'vModalIn 0.2s ease',
+      overflowY: 'auto',
     }}>
       <div onClick={e => e.stopPropagation()} style={{
         position: 'relative', width: '100%', maxWidth: 680,
@@ -891,14 +900,17 @@ const TeamMemberModal = ({ name, role, lang, bio, img, color, onClose }) => {
         border: '1px solid var(--line-2)',
         boxShadow: '0 40px 120px rgba(0,0,0,0.85)',
         animation: 'vModalUp 0.25s ease',
-        display: 'grid', gridTemplateColumns: '200px 1fr',
+        display: 'grid', gridTemplateColumns: '180px 1fr',
+        maxHeight: '90vh',
         overflow: 'hidden',
+        flexShrink: 0,
       }} className="team-modal-grid">
+
         {/* Photo column */}
-        <div style={{
+        <div className="team-modal-photo" style={{
           background: 'var(--bg)', borderRight: '1px solid var(--line)',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
-          padding: '32px 24px',
+          padding: '40px 20px',
         }}>
           <img src={img} alt={name} style={{
             width: '100%', aspectRatio: '1 / 1', borderRadius: '50%',
@@ -908,34 +920,68 @@ const TeamMemberModal = ({ name, role, lang, bio, img, color, onClose }) => {
             display: 'block',
           }} />
         </div>
-        {/* Bio column */}
-        <div style={{ padding: '32px 28px', overflowY: 'auto', maxHeight: '70vh' }}>
-          <span style={{
-            fontFamily: 'var(--mono)', fontSize: 9, letterSpacing: '0.18em',
-            textTransform: 'uppercase', color,
-            padding: '3px 10px', borderRadius: 999,
-            border: `1px solid color-mix(in oklab, ${color} 40%, var(--line))`,
-            background: `color-mix(in oklab, ${color} 8%, transparent)`,
-            display: 'inline-block', marginBottom: 14,
-          }}>{lang}</span>
-          <h2 style={{ fontFamily: 'var(--serif)', fontSize: 'clamp(22px,2.5vw,30px)', lineHeight: 1.1, marginBottom: 6 }}>{name}</h2>
-          <div style={{ fontFamily: 'var(--mono)', fontSize: 10, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--fg-3)', marginBottom: 24 }}>{role}</div>
-          <p style={{ fontSize: 15, color: 'var(--fg-2)', lineHeight: 1.75, margin: 0 }}>{bio}</p>
+
+        {/* Bio column — scrolls independently */}
+        <div className="team-modal-bio" style={{ padding: '36px 28px 32px', overflowY: 'auto' }}>
+          {/* Push right to avoid overlap with close button */}
+          <div style={{ paddingRight: 40 }}>
+            {lang && (
+              <span style={{
+                fontFamily: 'var(--mono)', fontSize: 9, letterSpacing: '0.18em',
+                textTransform: 'uppercase', color,
+                padding: '3px 10px', borderRadius: 999,
+                border: `1px solid color-mix(in oklab, ${color} 40%, var(--line))`,
+                background: `color-mix(in oklab, ${color} 8%, transparent)`,
+                display: 'inline-block', marginBottom: 14,
+              }}>{lang}</span>
+            )}
+            <h2 style={{ fontFamily: 'var(--serif)', fontSize: 'clamp(20px,2.5vw,28px)', lineHeight: 1.15, marginBottom: 6 }}>{name}</h2>
+            <div style={{ fontFamily: 'var(--mono)', fontSize: 10, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--fg-3)', marginBottom: 20 }}>{role}</div>
+          </div>
+          <p style={{ fontSize: 15, color: 'var(--fg-2)', lineHeight: 1.8, margin: 0 }}>{bio}</p>
         </div>
-        {/* Close */}
+
+        {/* Close — large tap target, always visible above content */}
         <button onClick={onClose} aria-label="Close" style={{
-          position: 'absolute', top: 14, right: 14,
-          width: 36, height: 36, borderRadius: '50%',
+          position: 'absolute', top: 12, right: 12, zIndex: 10,
+          width: 44, height: 44, borderRadius: '50%',
           background: 'rgba(255,255,255,0.08)', border: '1px solid var(--line)',
-          color: 'var(--fg)', fontSize: 20, cursor: 'pointer',
+          color: 'var(--fg)', fontSize: 22, cursor: 'pointer',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           transition: 'background 0.15s',
         }}
-          onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,0.16)'}
+          onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,0.18)'}
           onMouseLeave={e => e.currentTarget.style.background = 'rgba(255,255,255,0.08)'}
         >×</button>
       </div>
-      <style>{`@media(max-width:560px){.team-modal-grid{grid-template-columns:1fr!important;}}`}</style>
+
+      <style>{`
+        @media(max-width:560px){
+          .team-modal-grid {
+            grid-template-columns: 1fr !important;
+            max-height: 88vh !important;
+            overflow-y: auto !important;
+          }
+          .team-modal-photo {
+            border-right: none !important;
+            border-bottom: 1px solid var(--line) !important;
+            padding: 28px 24px 20px !important;
+            flex-direction: row !important;
+            gap: 16px !important;
+            align-items: center !important;
+            justify-content: flex-start !important;
+          }
+          .team-modal-photo img {
+            width: 80px !important;
+            flex-shrink: 0 !important;
+          }
+          .team-modal-bio {
+            padding: 20px 20px 28px !important;
+            overflow-y: visible !important;
+          }
+          .team-modal-bio div { padding-right: 48px !important; }
+        }
+      `}</style>
     </div>,
     document.body
   );
