@@ -4,17 +4,15 @@ import Link from 'next/link';
 import { Nav } from '../../../components/nav.jsx';
 import { Footer } from '../../../components/footer.jsx';
 import { CTA } from '../../../components/cta.jsx';
-import { PRESS_ARTICLES, CATEGORY_COLORS, formatDate } from '../../../data/press.js';
+import { getAllSlugs, getArticle, CATEGORY_COLORS, formatDate } from '../../../lib/press.js';
 
 export async function generateStaticParams() {
-  return PRESS_ARTICLES
-    .filter(a => a.content)
-    .map(a => ({ slug: a.slug }));
+  return getAllSlugs().map(slug => ({ slug }));
 }
 
 export async function generateMetadata({ params }) {
   const { slug } = await params;
-  const article = PRESS_ARTICLES.find(a => a.slug === slug);
+  const article = getArticle(slug);
   if (!article) return {};
   return {
     title: `${article.title} — Adapt`,
@@ -39,7 +37,7 @@ export async function generateMetadata({ params }) {
 
 export default async function PressArticlePage({ params }) {
   const { slug } = await params;
-  const article = PRESS_ARTICLES.find(a => a.slug === slug);
+  const article = getArticle(slug);
 
   if (!article) return notFound();
 
@@ -103,8 +101,7 @@ export default async function PressArticlePage({ params }) {
               textTransform: 'uppercase', color: 'var(--fg-3)',
               marginBottom: 32, transition: 'color 0.15s',
             }}
-            onMouseEnter={e => e.currentTarget.style.color = 'var(--fg)'}
-            onMouseLeave={e => e.currentTarget.style.color = 'var(--fg-3)'}
+            className="press-back-link"
           >
             ← Press
           </Link>
@@ -142,27 +139,10 @@ export default async function PressArticlePage({ params }) {
           </p>
 
           {/* Article body */}
-          {article.content ? (
-            <div style={{ fontSize: 16, color: 'var(--fg-2)', lineHeight: 1.75 }}
-              dangerouslySetInnerHTML={{ __html: article.content }}
+          {article.contentHtml && (
+            <div className="press-body" style={{ fontSize: 16, color: 'var(--fg-2)', lineHeight: 1.75 }}
+              dangerouslySetInnerHTML={{ __html: article.contentHtml }}
             />
-          ) : (
-            <div style={{
-              padding: 32, border: '1px solid var(--line)', borderRadius: 16,
-              textAlign: 'center',
-            }}>
-              <p style={{ color: 'var(--fg-2)', marginBottom: 20 }}>Read the full press release on our site.</p>
-              {article.externalUrl && (
-                <a
-                  href={article.externalUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn btn--primary"
-                >
-                  Read full article ↗
-                </a>
-              )}
-            </div>
           )}
         </div>
 
@@ -179,6 +159,19 @@ export default async function PressArticlePage({ params }) {
         <CTA />
       </main>
       <Footer />
+      <style>{`
+        .press-back-link:hover { color: var(--fg) !important; }
+        .press-body h2 { font-size: clamp(18px,2vw,24px); font-family: var(--serif); font-weight: 400; margin: 48px 0 16px; color: var(--fg); }
+        .press-body h3 { font-size: clamp(15px,1.5vw,19px); font-family: var(--serif); font-weight: 400; margin: 32px 0 12px; color: var(--fg); }
+        .press-body p { margin-bottom: 20px; }
+        .press-body ul, .press-body ol { padding-left: 24px; margin-bottom: 20px; }
+        .press-body li { margin-bottom: 8px; }
+        .press-body blockquote { border-left: 2px solid var(--accent); margin: 32px 0; padding: 8px 0 8px 20px; color: var(--fg); font-style: italic; }
+        .press-body blockquote p { margin-bottom: 0; }
+        .press-body a { color: var(--accent); text-decoration: underline; }
+        .press-body strong { color: var(--fg); font-weight: 500; }
+        .press-body hr { border: none; border-top: 1px solid var(--line); margin: 40px 0; }
+      `}</style>
     </>
   );
 }

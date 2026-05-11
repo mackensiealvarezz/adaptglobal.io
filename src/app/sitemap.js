@@ -1,16 +1,14 @@
-import { PRESS_ARTICLES } from '../data/press.js';
+import { getAllArticles } from '../lib/press.js';
 
 export default function sitemap() {
   const base = 'https://adaptglobal.io';
 
-  const pressArticles = PRESS_ARTICLES
-    .filter(a => a.content)
-    .map(a => ({
-      url: `${base}/press/${a.slug}/`,
-      lastModified: new Date(a.date),
-      changeFrequency: 'yearly',
-      priority: 0.6,
-    }));
+  const pressArticles = getAllArticles().map(a => ({
+    url: `${base}/press/${a.slug}/`,
+    lastModified: new Date(a.date),
+    changeFrequency: 'yearly',
+    priority: 0.6,
+  }));
 
   return [
     { url: `${base}/`,                    lastModified: new Date(), changeFrequency: 'weekly',  priority: 1.0 },
