@@ -25,10 +25,10 @@ const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
 }/*EDITMODE-END*/;
 
 const ACCENT_PRESETS = {
-  brand:    { '--accent': 'oklch(0.78 0.16 55)',  '--accent-2': 'oklch(0.72 0.14 235)', '--accent-glow': 'oklch(0.78 0.16 55 / 0.35)',  '--accent-2-glow': 'oklch(0.72 0.14 235 / 0.35)' },
-  warm:     { '--accent': 'oklch(0.80 0.17 50)',  '--accent-2': 'oklch(0.74 0.12 30)',  '--accent-glow': 'oklch(0.80 0.17 50 / 0.35)',  '--accent-2-glow': 'oklch(0.74 0.12 30 / 0.35)' },
-  electric: { '--accent': 'oklch(0.78 0.18 65)',  '--accent-2': 'oklch(0.70 0.18 255)', '--accent-glow': 'oklch(0.78 0.18 65 / 0.35)',  '--accent-2-glow': 'oklch(0.70 0.18 255 / 0.35)' },
-  ocean:    { '--accent': 'oklch(0.82 0.13 85)',  '--accent-2': 'oklch(0.70 0.13 215)', '--accent-glow': 'oklch(0.82 0.13 85 / 0.35)',  '--accent-2-glow': 'oklch(0.70 0.13 215 / 0.35)' },
+  brand:    { '--accent': '#fdbb00',              '--accent-2': '#1480fe',               '--accent-glow': 'rgba(253,187,0,0.35)',        '--accent-2-glow': 'rgba(20,128,254,0.35)' },
+  warm:     { '--accent': 'oklch(0.80 0.17 50)',  '--accent-2': 'oklch(0.74 0.12 30)',   '--accent-glow': 'oklch(0.80 0.17 50 / 0.35)', '--accent-2-glow': 'oklch(0.74 0.12 30 / 0.35)' },
+  electric: { '--accent': 'oklch(0.78 0.18 65)',  '--accent-2': 'oklch(0.70 0.18 255)',  '--accent-glow': 'oklch(0.78 0.18 65 / 0.35)', '--accent-2-glow': 'oklch(0.70 0.18 255 / 0.35)' },
+  ocean:    { '--accent': 'oklch(0.82 0.13 85)',  '--accent-2': 'oklch(0.70 0.13 215)',  '--accent-glow': 'oklch(0.82 0.13 85 / 0.35)', '--accent-2-glow': 'oklch(0.70 0.13 215 / 0.35)' },
 };
 
 export default function Page() {

@@ -19,6 +19,18 @@ Adapt is redefining media localization by blending cutting-edge AI with the expe
 
 Together, Adapt and We Collaborative will roll out new training programs, tools, and resources for over 500 Cultural Ambassadors worldwide in the coming months — empowering the next generation of global localization professionals.
 
+## The Role of Cultural Ambassadors in AI Localization
+
+Adapt's Cultural Ambassadors are the human backbone of every project the company delivers. Unlike traditional voice talent or translators hired on a per-project basis, Cultural Ambassadors are embedded professionals who combine linguistic expertise with regional cultural knowledge and technical understanding of AI-assisted workflows. They direct synthesized voices, adapt translated scripts for natural spoken cadence, and make the judgment calls that separate acceptable translations from authentic ones.
+
+Training this global workforce is therefore not simply an HR initiative — it is a direct investment in the quality of Adapt's output. The partnership with We Collaborative addresses a critical scaling challenge: as Adapt expands into more language markets and takes on higher content volumes, maintaining consistent standards across a geographically distributed workforce requires structured, repeatable training infrastructure.
+
+## About We Collaborative
+
+We Collaborative is a consultancy specializing in talent infrastructure, organizational design, and continuous improvement programs for companies operating at scale. Founder Magda Jagucka Miller brings over two decades of experience building localization operations globally, including leadership roles at major content localization providers. Her background spans workforce development, process optimization, and the design of training ecosystems for multilingual environments.
+
+The firm works with media and technology companies to build the organizational capabilities needed to grow confidently — combining strategic design with practical implementation that can be deployed across large, distributed teams.
+
 ## About Adapt
 
 Adapt is dedicated to integrating AI with human expertise to elevate media services, making the acceptable exceptional. Founded in 2024, Adapt explores the intersection of technology and creativity in media.

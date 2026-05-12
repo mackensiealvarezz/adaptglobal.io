@@ -4,10 +4,10 @@ import React from 'react';
 // Metrics strip — sits right under hero, big numbers
 const Metrics = () => {
   const stats = [
+    { value: '500+', label: 'Human experts worldwide', sub: 'Cultural Ambassadors & Tech Producers', accent: true },
+    { value: '100%', label: 'Human-reviewed output', sub: 'Every line, every time — no exceptions', accent: true },
     { value: '4×', label: 'Less than market rates', sub: 'Cost reduction without quality loss' },
     { value: '4×', label: 'Faster delivery', sub: 'From source to streaming-ready' },
-    { value: '40+', label: 'Languages supported', sub: 'Across emerging & established markets' },
-    { value: '100%', label: 'Human-reviewed', sub: 'Every output, every time' },
   ];
 
   return (
@@ -27,13 +27,14 @@ const Metrics = () => {
               padding: 'clamp(28px, 4vw, 48px) clamp(20px, 2.5vw, 32px)',
               borderRight: i < stats.length - 1 ? '1px solid var(--line)' : 'none',
               display: 'flex', flexDirection: 'column', gap: 8,
+              background: s.accent ? 'linear-gradient(180deg, color-mix(in oklab, var(--accent) 5%, transparent), transparent)' : 'transparent',
             }}>
               <div style={{
                 fontFamily: 'var(--serif)',
                 fontSize: 'clamp(40px, 5vw, 72px)',
                 lineHeight: 1,
                 letterSpacing: '-0.02em',
-                color: 'var(--fg)',
+                color: s.accent ? 'var(--accent)' : 'var(--fg)',
               }}>
                 {s.value}
               </div>

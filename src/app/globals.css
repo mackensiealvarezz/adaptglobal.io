@@ -8,10 +8,13 @@
   --fg-2: rgba(244,243,238,0.72);
   --fg-3: rgba(244,243,238,0.48);
   --fg-4: rgba(244,243,238,0.28);
-  --accent: oklch(0.78 0.16 55);
-  --accent-2: oklch(0.72 0.14 235);
-  --accent-glow: oklch(0.78 0.16 55 / 0.35);
-  --accent-2-glow: oklch(0.72 0.14 235 / 0.35);
+  --accent: #fdbb00;
+  --accent-2: #1480fe;
+  --accent-3: #2eb9c1;
+  --accent-orange: #f87b1b;
+  --accent-red: #f33b35;
+  --accent-glow: rgba(253,187,0,0.35);
+  --accent-2-glow: rgba(20,128,254,0.35);
   --serif: "Instrument Serif", "Times New Roman", serif;
   --sans: "Geist", -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif;
   --mono: "JetBrains Mono", ui-monospace, monospace;

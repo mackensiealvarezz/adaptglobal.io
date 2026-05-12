@@ -13,7 +13,18 @@ export const metadata = {
     title: 'Studios & Broadcasters | Adapt',
     description: 'Theatrical-grade localization at scale. Human-centric AI dubbing that sounds better than the competition.',
     url: 'https://adaptglobal.io/studios-broadcasters/',
+    images: [{ url: 'https://adaptglobal.io/wp-content/uploads/image003-1-1080x675.jpg', width: 1080, height: 675, alt: 'Adapt — Studios & Broadcasters' }],
   },
+  twitter: { card: 'summary_large_image', images: ['https://adaptglobal.io/wp-content/uploads/image003-1-1080x675.jpg'] },
+};
+
+const studiosSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://adaptglobal.io' },
+    { '@type': 'ListItem', position: 2, name: 'Studios & Broadcasters', item: 'https://adaptglobal.io/studios-broadcasters/' },
+  ],
 };
 
 const CDN = 'https://adaptglobal.io/wp-content/uploads/';
@@ -174,6 +185,7 @@ const REGIONAL_LEADS = [
 export default function StudiosPage() {
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(studiosSchema) }} />
       <Nav />
       <main>
 

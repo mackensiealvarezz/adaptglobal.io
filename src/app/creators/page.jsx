@@ -11,7 +11,18 @@ export const metadata = {
     title: 'Creators | Adapt',
     description: 'AI-enabled localization for content creators. Single clips, subscriptions, or go global free.',
     url: 'https://adaptglobal.io/creators/',
+    images: [{ url: 'https://adaptglobal.io/wp-content/uploads/Image-1080x675.jpeg', width: 1080, height: 675, alt: 'Adapt Creator Portal — Go Global' }],
   },
+  twitter: { card: 'summary_large_image', images: ['https://adaptglobal.io/wp-content/uploads/Image-1080x675.jpeg'] },
+};
+
+const creatorsSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://adaptglobal.io' },
+    { '@type': 'ListItem', position: 2, name: 'Creators', item: 'https://adaptglobal.io/creators/' },
+  ],
 };
 
 const PLANS = [
@@ -47,6 +58,7 @@ const PLANS = [
 export default function CreatorsPage() {
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(creatorsSchema) }} />
       <Nav />
       <main>
         {/* Hero */}

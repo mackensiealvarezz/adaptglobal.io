@@ -21,6 +21,20 @@ Adapt's platform combines advanced AI technology with a global marketplace of pr
 
 > "We are always looking to partner with innovators who are pushing the industry forward," said Justin Beaudin, Founder and CEO at Adapt. "Our goal is to make high-quality localization as easy and as fast as possible, and this integration with Matchpoint takes us one big step closer."
 
+## How the Integration Works
+
+The Matchpoint–Adapt integration connects two previously separate workflows: media supply chain management and localization ordering. Inside Matchpoint, users select the assets they want to localize, choose their target languages, specify whether they need dubbing or subtitling, and submit the order — all within a familiar interface they already use daily. Matchpoint then communicates with Adapt's Nuance platform via API, triggering the localization workflow and providing status updates back into the Matchpoint dashboard.
+
+This eliminates the manual handoff that previously characterized the localization ordering process — shared spreadsheets, email chains, and manual asset transfers that introduced delays and opportunities for error. For media organizations managing dozens of titles across multiple language markets simultaneously, the integration reduces administrative overhead and accelerates time-to-market.
+
+Completed localizations are delivered back through Matchpoint with full metadata, quality assurance documentation, and format compliance records, ready for onward distribution to streaming platforms, broadcast partners, or theatrical distributors.
+
+## Why API-First Localization Is the Future
+
+Enterprise media workflows are increasingly built around connected, API-driven platforms. Studios and distributors have invested heavily in supply chain tools like Matchpoint precisely because they centralize complexity and provide visibility across large content portfolios. Localization has historically sat outside these systems — a manual process bolted on at the end of production — creating a bottleneck that grows more acute as global content distribution accelerates.
+
+Adapt's API-first architecture is designed to integrate directly into existing production infrastructure rather than requiring clients to adopt a new platform. This approach lowers adoption friction and allows localization to begin earlier in the production lifecycle, when script-level changes are still possible and more cost-effective.
+
 ## About Matchpoint®
 
 Matchpoint® is an award-winning, AI-powered, automated media supply chain that transforms how media and entertainment companies manage and deliver streaming video assets. It was developed to address the challenges facing studios and content owners due to rising costs, complexity, and scale, by replacing manual, labor-intensive workflows with an intelligent, end-to-end system.

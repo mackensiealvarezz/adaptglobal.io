@@ -106,8 +106,7 @@ const Hero = ({ tweaks }) => {
         </h1>
 
         <p className="lead" style={{ marginTop: 32, maxWidth: '52ch' }}>
-          We combine powerful AI tools for transcription, translation, and voice synthesis
-          with regional experts — delivering premium dubs and subtitles at <strong style={{ color: 'var(--fg)' }}>4× less than market rates</strong> and <strong style={{ color: 'var(--fg)' }}>4× faster</strong>.
+          Our <strong style={{ color: 'var(--fg)' }}>Cultural Ambassadors and Tech Producers</strong> guide every single step — backed by AI for transcription, translation, and voice synthesis — delivering premium dubs and subtitles at <strong style={{ color: 'var(--accent)' }}>4× less than market rates</strong> and <strong style={{ color: 'var(--accent)' }}>4× faster</strong>.
         </p>
 
         <div style={{
@@ -115,7 +114,7 @@ const Hero = ({ tweaks }) => {
           display: 'flex', flexWrap: 'wrap', gap: 12,
           alignItems: 'center',
         }}>
-          <a href="#contact" className="btn btn--primary" style={{ padding: '16px 24px', fontSize: 14 }}>
+          <a href="#contact" className="btn btn--accent" style={{ padding: '16px 24px', fontSize: 14 }}>
             Get in touch <span className="arrow">→</span>
           </a>
           <a href="#demo" className="btn" style={{ padding: '16px 24px', fontSize: 14 }}>
@@ -127,6 +126,25 @@ const Hero = ({ tweaks }) => {
             }}>▶</span>
             Hear the difference
           </a>
+        </div>
+
+        {/* Human-in-the-loop trust signals */}
+        <div style={{
+          marginTop: 24,
+          display: 'flex', flexWrap: 'wrap', gap: 'clamp(12px,2vw,24px)',
+          fontFamily: 'var(--mono)', fontSize: 10, letterSpacing: '0.12em',
+          textTransform: 'uppercase', color: 'var(--fg-3)',
+        }}>
+          {[
+            { icon: '◉', text: '500+ Cultural Ambassadors' },
+            { icon: '◎', text: 'Human-verified every step' },
+            { icon: '✓', text: '100% quality reviewed' },
+          ].map(({ icon, text }) => (
+            <span key={text} style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
+              <span style={{ color: 'var(--accent)' }}>{icon}</span>
+              {text}
+            </span>
+          ))}
         </div>
 
         {/* Language selector strip */}
@@ -209,6 +227,30 @@ const Hero = ({ tweaks }) => {
   );
 };
 
+// Exact logo colors — sweeps warm → cool → back, yellow leads
+const WAVE_PALETTE = [
+  [253, 187,   0],  // #fdbb00 — logo yellow
+  [248, 123,  27],  // #f87b1b — logo orange
+  [243,  59,  53],  // #f33b35 — logo red
+  [248, 123,  27],  // #f87b1b — orange (return)
+  [253, 187,   0],  // #fdbb00 — yellow (center anchor)
+  [ 46, 185, 193],  // #2eb9c1 — logo teal
+  [ 20, 128, 254],  // #1480fe — logo blue
+  [ 46, 185, 193],  // #2eb9c1 — teal (return)
+];
+
+function lerpC(a, b, t) {
+  return [a[0]+(b[0]-a[0])*t, a[1]+(b[1]-a[1])*t, a[2]+(b[2]-a[2])*t];
+}
+
+function waveColor(pos) {
+  const n = WAVE_PALETTE.length;
+  const s = ((pos % 1) + 1) % 1 * (n - 1);
+  const i = Math.floor(s);
+  const [r, g, b] = lerpC(WAVE_PALETTE[i], WAVE_PALETTE[Math.min(i + 1, n - 1)], s - i);
+  return `rgb(${Math.round(r)},${Math.round(g)},${Math.round(b)})`;
+}
+
 // Live SVG waveform underline beneath the morphing word
 const Waveform = ({ paused }) => {
   const [t, setT] = React.useState(0);
@@ -226,7 +268,7 @@ const Waveform = ({ paused }) => {
   const N = 28;
   const bars = Array.from({ length: N }, (_, i) => {
     const phase = i * 0.45 + t * 4;
-    const env = Math.sin((i / N) * Math.PI); // taper at edges
+    const env = Math.sin((i / N) * Math.PI);
     const v = (Math.sin(phase) * 0.5 + 0.5) * 0.7 + 0.2;
     return Math.max(0.1, env * v);
   });
@@ -238,14 +280,14 @@ const Waveform = ({ paused }) => {
       height: '0.4em',
       display: 'flex', alignItems: 'flex-end', gap: 2,
       pointerEvents: 'none',
-      opacity: 0.55,
+      opacity: 0.7,
     }}>
       {bars.map((h, i) => (
         <span key={i} suppressHydrationWarning style={{
           flex: 1,
           height: `${(h * 100).toFixed(4)}%`,
           minHeight: 2,
-          background: i % 2 === 0 ? 'var(--accent)' : 'var(--accent-2)',
+          background: waveColor((i / N) + t * 0.12),
           borderRadius: 1,
         }} />
       ))}

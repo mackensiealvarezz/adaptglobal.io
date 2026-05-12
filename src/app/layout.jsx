@@ -30,16 +30,38 @@ export const metadata = {
   robots: { index: true, follow: true },
 };
 
-const orgJsonLd = {
+const siteJsonLd = {
   '@context': 'https://schema.org',
-  '@type': 'Organization',
-  name: 'Adapt',
-  url: 'https://adaptglobal.io/',
-  description: 'AI-powered media localization platform combining voice synthesis, translation, and regional experts to deliver premium dubbing and subtitling.',
-  sameAs: [
-    'https://www.linkedin.com/company/adaptglobal',
-    'https://www.instagram.com/adaptglobal.io/',
-    'https://www.youtube.com/@Adaptglobal-io',
+  '@graph': [
+    {
+      '@type': 'Organization',
+      '@id': 'https://adaptglobal.io/#organization',
+      name: 'Adapt',
+      url: 'https://adaptglobal.io/',
+      foundingDate: '2024',
+      logo: {
+        '@type': 'ImageObject',
+        url: 'https://adaptglobal.io/wp-content/uploads/2024/04/Adapt_Logo_Primary_Color-White.svg',
+      },
+      description: 'AI-powered media localization combining 500+ Cultural Ambassadors with AI tools to deliver premium dubbing and subtitles at 4× less than market rates and 4× faster.',
+      sameAs: [
+        'https://www.linkedin.com/company/adaptglobal',
+        'https://www.instagram.com/adaptglobal.io/',
+        'https://www.youtube.com/@Adaptglobal-io',
+      ],
+    },
+    {
+      '@type': 'WebSite',
+      '@id': 'https://adaptglobal.io/#website',
+      url: 'https://adaptglobal.io/',
+      name: 'Adapt',
+      publisher: { '@id': 'https://adaptglobal.io/#organization' },
+      potentialAction: {
+        '@type': 'SearchAction',
+        target: { '@type': 'EntryPoint', urlTemplate: 'https://adaptglobal.io/?s={search_term_string}' },
+        'query-input': 'required name=search_term_string',
+      },
+    },
   ],
 };
 
@@ -55,7 +77,7 @@ export default function RootLayout({ children }) {
         />
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(orgJsonLd) }}
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(siteJsonLd) }}
         />
       </head>
       <body>

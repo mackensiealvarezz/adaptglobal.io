@@ -17,6 +17,12 @@ This expansion strengthens Adapt's ability to make informed strategic decisions 
 
 The Strategic Advisory Board — comprised of angel investors and senior executives — also invests in Adapt's pre-seed round, demonstrating their confidence in the company's vision and commitment to advancing the intersection of human and machine creativity. The Board meets quarterly to provide strategic guidance as Adapt scales its operations and partnerships globally.
 
+## Why an Advisory Board Matters at This Stage
+
+Adapt is operating at an inflection point in the localization industry. AI dubbing and subtitling capabilities have advanced rapidly, but market adoption among major studios and streaming platforms still depends heavily on trust, relationships, and a clear understanding of which content types and distribution contexts are best served by AI-assisted workflows. The Advisory Board was assembled specifically to provide that perspective — connecting Adapt's leadership team with executives who have firsthand experience making content acquisition, localization, and technology purchasing decisions at the platforms that matter most.
+
+The Board also plays a financial role. Members participate in Adapt's pre-seed investment round, providing early-stage capital alongside their strategic guidance. This dual commitment — investing money and time — reflects a conviction that Adapt's approach to human-centered AI localization addresses a genuine market gap.
+
 ## Advisory Board Members
 
 - **Erin Foye** – Executive Producer (Netflix, Hulu, Bravo, MTV, Roku)

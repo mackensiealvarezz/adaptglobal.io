@@ -44,6 +44,7 @@ const TECH = [
 export default function PlatformPage() {
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(platformSchema) }} />
       <Nav />
       <main>
         {/* Hero */}
@@ -223,5 +224,16 @@ export const metadata = {
     title: 'Platform — Nuance | Adapt',
     description: 'The AI + human orchestration layer behind Adapt\'s premium dubs and subtitles.',
     url: 'https://adaptglobal.io/platform/',
+    images: [{ url: 'https://adaptglobal.io/wp-content/uploads/nuance_Order_search_high-scaled.jpg', width: 1080, height: 675, alt: 'Nuance — Adapt\'s AI Localization Platform' }],
   },
+  twitter: { card: 'summary_large_image', images: ['https://adaptglobal.io/wp-content/uploads/nuance_Order_search_high-scaled.jpg'] },
+};
+
+const platformSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://adaptglobal.io' },
+    { '@type': 'ListItem', position: 2, name: 'Platform', item: 'https://adaptglobal.io/platform/' },
+  ],
 };

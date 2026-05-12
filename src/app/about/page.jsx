@@ -12,6 +12,11 @@ export const metadata = {
     title: 'About Adapt | The Future of Media Localization',
     description: 'A team of experts from Netflix, Warner, NBCUniversal, Deluxe, and IYUNO — combining AI with the best localization artists in the world.',
     url: 'https://adaptglobal.io/about/',
+    images: [{ url: 'https://adaptglobal.io/wp-content/uploads/Adapt-Expands-Strategic-Advisory-Board-to-Accelerate-AI-Localization-Growth-1080x675.jpeg', width: 1080, height: 675, alt: 'Adapt Leadership Team' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    images: ['https://adaptglobal.io/wp-content/uploads/Adapt-Expands-Strategic-Advisory-Board-to-Accelerate-AI-Localization-Growth-1080x675.jpeg'],
   },
 };
 
@@ -103,9 +108,31 @@ const PRINCIPLES = [
 
 const STUDIOS = ['Netflix', 'Warner Bros.', 'NBCUniversal', 'Deluxe', 'IYUNO', 'Crunchyroll', 'Lionsgate', 'Disney'];
 
+const aboutSchema = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://adaptglobal.io' },
+        { '@type': 'ListItem', position: 2, name: 'About', item: 'https://adaptglobal.io/about/' },
+      ],
+    },
+    ...LEADERSHIP.slice(0, 5).map(p => ({
+      '@type': 'Person',
+      name: p.name,
+      jobTitle: p.title,
+      image: p.img,
+      description: p.bio,
+      worksFor: { '@type': 'Organization', '@id': 'https://adaptglobal.io/#organization' },
+    })),
+  ],
+};
+
 export default function AboutPage() {
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(aboutSchema) }} />
       <Nav />
       <main>
 
@@ -280,6 +307,24 @@ export default function AboutPage() {
               .principle-row{grid-template-columns:1fr!important;gap:8px!important;}
             }
           `}</style>
+        </section>
+
+        {/* ── Press link ──────────────────────────────────────────── */}
+        <section style={{ padding: 'clamp(48px,5vw,80px) 0', borderTop: '1px solid var(--line)' }}>
+          <div className="wrap" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 32, flexWrap: 'wrap' }}>
+            <div>
+              <div className="section-label" style={{ marginBottom: 12 }}><span>In the News</span></div>
+              <h3 style={{ fontFamily: 'var(--serif)', fontSize: 'clamp(22px,3vw,36px)', fontWeight: 400, lineHeight: 1.2, marginBottom: 8 }}>
+                Adapt in the <span className="italic-serif" style={{ color: 'var(--accent)' }}>press.</span>
+              </h3>
+              <p style={{ color: 'var(--fg-2)', fontSize: 15, maxWidth: '48ch' }}>
+                Partnerships, industry recognition, and product launches — read the latest coverage from Adapt.
+              </p>
+            </div>
+            <a href="/press" className="btn btn--accent" style={{ fontSize: 14, padding: '14px 24px', flexShrink: 0 }}>
+              Visit Press Room <span className="arrow">→</span>
+            </a>
+          </div>
         </section>
 
         <CTA />

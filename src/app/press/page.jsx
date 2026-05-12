@@ -29,12 +29,22 @@ export const metadata = {
   },
 };
 
+const pressSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://adaptglobal.io' },
+    { '@type': 'ListItem', position: 2, name: 'Press', item: 'https://adaptglobal.io/press/' },
+  ],
+};
+
 export default function PressPage() {
   const articles = getAllArticles();
   const [featured, ...rest] = articles;
 
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(pressSchema) }} />
       <Nav />
       <main>
         {/* ── Hero ── */}
